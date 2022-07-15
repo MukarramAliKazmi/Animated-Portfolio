@@ -60,7 +60,9 @@ for(let j = 0; j < 6; j++) {
         vertices2.push(vertices[vertices.length - 1])
     } else {
         vertices = []
+        // vertices.push(vertices2[0])
         for(let i = 0; i < vertices2.length - 3; i++) {
+            // vertices2.push(vertices[i])
 
             x1 = ( vertices2[i].x + vertices2[i+1].x ) / 2
             y1 = ( vertices2[i].y + vertices2[i+1].y ) / 2
@@ -95,18 +97,21 @@ const {min: {x}, max: {y}} = ground.bounds;
 World.add(world, [
   car,
   ground,
+  // Bodies.rectangle(400, 400, 810, 30, { isStatic: true, friction: 2 }),
 ]);
 
 
 Render.run(render);
 
 setInterval(function () {
+  // while(1) {
   render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
   render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
 
   //   render.bounds.min.y = car.bodies[0].bounds.min.y - 400;
   //   render.bounds.max.y = car.bodies[0].bounds.min.y + render.options.height - 400;
 });
+  // }
 
 function Cars(xx, yy, width, height, wheelSize) {
 
@@ -123,7 +128,7 @@ function Cars(xx, yy, width, height, wheelSize) {
     const body = Matter.Bodies.fromVertices(
       xx, yy, Matter.Svg.pathToVertices(path), {}, true
     );
-    Matter.Body.scale(body, 0.4, 0.4);
+    Matter.Body.scale(body, 0.3, 0.3);
     return body;
   })
   carBody[0].collisionFilter.group = group
@@ -132,14 +137,13 @@ function Cars(xx, yy, width, height, wheelSize) {
   //   carBody[0].parts[i].render.fillStyle = "#CCCCCC"
   // }
 
-
-  var fakeBody = Bodies.rectangle(xx, yy, 300, 30, {
+  var fakeBody = Bodies.rectangle(xx, yy, 210, 30, {
     collisionFilter: {
       group: group,
     },
   })
 
-  var wheelA = Bodies.circle(xx + wheelAOffset - 40, yy + wheelYOffset + 50, wheelSize - 12, {
+  var wheelA = Bodies.circle(xx + wheelAOffset - 40, yy + wheelYOffset + 50, wheelSize - 18, {
     collisionFilter: {
       group: group,
     },
@@ -156,7 +160,7 @@ function Cars(xx, yy, width, height, wheelSize) {
   });
 
 
-  var wheelB = Bodies.circle(xx + wheelBOffset + 20, yy + wheelYOffset + 50, wheelSize - 12, {
+  var wheelB = Bodies.circle(xx + wheelBOffset + 20, yy + wheelYOffset + 50, wheelSize - 18, {
     collisionFilter: {
       group: group,
     },
@@ -174,7 +178,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelA = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelAOffset - 25, y: wheelYOffset + 70},
+    pointB: { x: wheelAOffset , y: wheelYOffset + 60},
     bodyA: wheelA,
     stiffness: 0.1,
     length: 0,
@@ -182,7 +186,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelB = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelBOffset + 95 - 57, y: wheelYOffset + 70},
+    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 60},
     bodyA: wheelB,
     stiffness: 0.1,
     length: 0,
@@ -190,8 +194,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelC = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 55, y: -10},
-    pointA: { x: -200 + 55, y: -18},
+    pointB: { x: -200 + 100, y: -10},
+    pointA: { x: -200 + 100, y: -18},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -200,8 +204,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelD = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 55, y: 10},
-    pointA: { x: -200 + 55, y: 2},
+    pointB: { x: -200 + 100, y: 10},
+    pointA: { x: -200 + 100, y: 2},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -210,8 +214,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelE = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 55, y: -10},
-    pointA: { x: 200 - 55, y: -18},
+    pointB: { x: 200 - 100, y: -10},
+    pointA: { x: 200 - 100, y: -18},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -220,8 +224,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelF = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 55, y: 10},
-    pointA: { x: 200 - 55, y: 2},
+    pointB: { x: 200 - 100, y: 10},
+    pointA: { x: 200 - 100, y: 2},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -229,7 +233,7 @@ function Cars(xx, yy, width, height, wheelSize) {
   });
 
   Composite.addBody(car, carBody[0]);
-  Composite.addBody(car, fakeBody)
+  Composite.addBody(car, fakeBody);
   Composite.addBody(car, wheelA);
   Composite.addBody(car, wheelB);
   Composite.addConstraint(car, axelA);
