@@ -1,0 +1,10 @@
+body {
+    text-align: center;
+    margin: 0px;
+    font-family: "Lato";
+    overflow: hidden;
+}
+
+svg {
+    display: none;
+}

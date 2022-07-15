@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "matter-js": "^0.18.0",
+    "p5": "^1.4.1",
+    "pathseg": "^1.2.1",
+    "poly-decomp": "^0.3.0",
+    "stats.js": "^0.17.0"
+  }
+}
