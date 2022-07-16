@@ -32,58 +32,12 @@ Matter.Runner.run(engine);
 
 var car = Cars(400, 200, 200, 90, 40);
 
-var vertices = [
-  ...[...Array(30)].map((_, i) => ({
-      x: i * 200,
-      y: Math.floor(Math.random() * 100),
-  })),
-  {x: w * 6, y: 200},
-  {x: 0, y: 200},
-];
-
-
-let vertices2 = [];
-for(let j = 0; j < 6; j++) {
-    if (j % 2 === 0) {
-        vertices2 = []
-        vertices2.push(vertices[0])
-        for(let i = 0; i < vertices.length - 3; i++) {
-            vertices2.push(vertices[i])
-
-            x1 = ( vertices[i].x + vertices[i+1].x ) / 2
-            y1 = ( vertices[i].y + vertices[i+1].y ) / 2
-
-            vertices2.push({x: x1, y: y1})
-        }
-        vertices2.push(vertices[vertices.length - 3])
-        vertices2.push(vertices[vertices.length - 2])
-        vertices2.push(vertices[vertices.length - 1])
-    } else {
-        vertices = []
-        // vertices.push(vertices2[0])
-        for(let i = 0; i < vertices2.length - 3; i++) {
-            // vertices2.push(vertices[i])
-
-            x1 = ( vertices2[i].x + vertices2[i+1].x ) / 2
-            y1 = ( vertices2[i].y + vertices2[i+1].y ) / 2
-
-            vertices.push({x: x1, y: y1})
-        }
-        vertices.push(vertices2[vertices2.length - 3])
-        vertices.push(vertices2[vertices2.length - 2])
-        vertices.push(vertices2[vertices2.length - 1])
-    }
-}
-
-console.log(vertices)
-
 const ground = Matter.Bodies.fromVertices(
   w, h,
-  vertices,
+  Vertices(),
   {isStatic: true},
   flagInternal = true,
 );
-
 
 console.log(ground)
 
@@ -97,21 +51,14 @@ const {min: {x}, max: {y}} = ground.bounds;
 World.add(world, [
   car,
   ground,
-  // Bodies.rectangle(400, 400, 810, 30, { isStatic: true, friction: 2 }),
 ]);
-
 
 Render.run(render);
 
 setInterval(function () {
-  // while(1) {
   render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
   render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
-
-  //   render.bounds.min.y = car.bodies[0].bounds.min.y - 400;
-  //   render.bounds.max.y = car.bodies[0].bounds.min.y + render.options.height - 400;
 });
-  // }
 
 function Cars(xx, yy, width, height, wheelSize) {
 
@@ -133,11 +80,7 @@ function Cars(xx, yy, width, height, wheelSize) {
   })
   carBody[0].collisionFilter.group = group
 
-  // for (let i = 0; i <= 28; i++) {
-  //   carBody[0].parts[i].render.fillStyle = "#CCCCCC"
-  // }
-
-  var fakeBody = Bodies.rectangle(xx, yy, 210, 30, {
+  var fakeBody = Bodies.rectangle(xx, yy, 210, 16, {
     collisionFilter: {
       group: group,
     },
@@ -147,13 +90,6 @@ function Cars(xx, yy, width, height, wheelSize) {
     collisionFilter: {
       group: group,
     },
-    // render: {
-    //   sprite: {
-    //     texture: './img/tyre.png',
-    //     xScale: 0.6,
-    //     yScale: 0.6,
-    //   }
-    // },
     inertia: 10000,
     friction: 4,
     restitution: 0.8,
@@ -164,13 +100,6 @@ function Cars(xx, yy, width, height, wheelSize) {
     collisionFilter: {
       group: group,
     },
-    // render: {
-    //   sprite: {
-    //     texture: './img/tyre.png',
-    //     xScale: 0.6,
-    //     yScale: 0.6
-    //   }
-    // },
     friction: 4,
     inertia: 10000,
     restitution: 0.8,
@@ -178,24 +107,24 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelA = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelAOffset , y: wheelYOffset + 60},
+    pointB: { x: wheelAOffset + 2, y: wheelYOffset + 55},
     bodyA: wheelA,
-    stiffness: 0.1,
+    stiffness: 0.15,
     length: 0,
   });
 
   var axelB = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 60},
+    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 55},
     bodyA: wheelB,
-    stiffness: 0.1,
+    stiffness: 0.15,
     length: 0,
   });
 
   var axelC = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 100, y: -10},
-    pointA: { x: -200 + 100, y: -18},
+    pointB: { x: -200 + 100, y: -5},
+    pointA: { x: -200 + 100, y: -13},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -204,8 +133,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelD = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 100, y: 10},
-    pointA: { x: -200 + 100, y: 2},
+    pointB: { x: -200 + 100, y: 6},
+    pointA: { x: -200 + 100, y: -2},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -214,8 +143,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelE = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 100, y: -10},
-    pointA: { x: 200 - 100, y: -18},
+    pointB: { x: 200 - 100, y: -5},
+    pointA: { x: 200 - 100, y: -13},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -224,8 +153,8 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelF = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 100, y: 10},
-    pointA: { x: 200 - 100, y: 2},
+    pointB: { x: 200 - 100, y: 6},
+    pointA: { x: 200 - 100, y: -2},
 
     bodyA: carBody[0],
     stiffness: 1,
@@ -245,6 +174,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
 
   window.addEventListener("keydown", function (event) {
+    console.log("hello")
       if (event.code === "ArrowLeft") {        
         Body.setAngularVelocity(wheelA, -0.4);
         Body.setAngularVelocity(wheelB, -0.4);
@@ -252,12 +182,57 @@ function Cars(xx, yy, width, height, wheelSize) {
           Body.setAngularVelocity(wheelA, 0.4);
           Body.setAngularVelocity(wheelB, 0.4);
       } else if (event.code === "ArrowDown") { 
-
         Body.setAngularVelocity(wheelA, 0);
         Body.setAngularVelocity(wheelB, 0);
+        World.remove(world, ground)
+
       }
 
   },false);
 
   return car;
+}
+
+
+function Vertices() {
+  var vertices = [
+    ...[...Array(13)].map((_, i) => ({
+        x: i * 250,
+        y: Math.floor(Math.random() * 150),
+    })),
+    {x: 3000, y: 200},
+    {x: 0, y: 200},
+  ];
+
+  var vertices2 = [];
+  for(let j = 0; j < 6; j++) {
+      if (j % 2 === 0) {
+          vertices2 = []
+          vertices2.push(vertices[0])
+          for(let i = 0; i < vertices.length - 3; i++) {
+              vertices2.push(vertices[i])
+
+              x1 = ( vertices[i].x + vertices[i+1].x ) / 2
+              y1 = ( vertices[i].y + vertices[i+1].y ) / 2
+
+              vertices2.push({x: x1, y: y1})
+          }
+          vertices2.push(vertices[vertices.length - 3])
+          vertices2.push(vertices[vertices.length - 2])
+          vertices2.push(vertices[vertices.length - 1])
+      } else {
+          vertices = []
+          for(let i = 0; i < vertices2.length - 3; i++) {
+              x1 = ( vertices2[i].x + vertices2[i+1].x ) / 2
+              y1 = ( vertices2[i].y + vertices2[i+1].y ) / 2
+
+              vertices.push({x: x1, y: y1})
+          }
+          vertices.push(vertices2[vertices2.length - 3])
+          vertices.push(vertices2[vertices2.length - 2])
+          vertices.push(vertices2[vertices2.length - 1])
+      }
+  }
+
+  return vertices;
 }
