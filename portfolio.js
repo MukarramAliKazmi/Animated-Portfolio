@@ -22,43 +22,146 @@ var render = Render.create({
     width: w,
     height: h,
     wireframes: false,
-    // background: "white",
     hasBounds: true,
     showAngleIndicator: true,
   },
 });
 
-Matter.Runner.run(engine);
 
-var car = Cars(400, 200, 200, 90, 40);
+var tyres
+var truck_body
+var car 
+var ground
+var canvas
+let verticesA
+///
+function setup() {
+  canvas = createCanvas(w, h);
+  tyres = loadImage('/img/tyre.svg');
+  truck_body = loadImage('/img/truck_body.svg')
+///
 
-const ground = Matter.Bodies.fromVertices(
-  w, h,
-  Vertices(),
-  {isStatic: true},
-  flagInternal = true,
-);
+  car = Cars(400, 200, 200, 90, 40);
 
-console.log(ground)
+  verticesA = Vertices()
+  ground = Matter.Bodies.fromVertices(
+    w, h,
+    verticesA,
+    {isStatic: true},
+    flagInternal = true,
+  );
 
-Matter.Body.setPosition(ground, {
-  x: w - ground.bounds.min.x,
-  y: h - ground.bounds.max.y + 730,
-});
 
-const {min: {x}, max: {y}} = ground.bounds;
 
-World.add(world, [
-  car,
-  ground,
-]);
+  Matter.Body.setPosition(ground, {
+    x: w - ground.bounds.min.x,
+    y: h - ground.bounds.max.y + 730,
+  });
 
-Render.run(render);
+  const {min: {x}, max: {y}} = ground.bounds;
 
-setInterval(function () {
-  render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
-  render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
-});
+  World.add(world, [
+    car,
+    ground,
+  ]);
+
+  // Render.run(render);
+  Matter.Runner.run(engine);
+
+  // setInterval(function () {
+  //   render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
+  //   render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
+  // });
+
+///
+  canvas.position(0, 0);
+  rectMode(CENTER)
+  ellipseMode(CENTER)
+  angleMode(RADIANS);
+  imageMode(CENTER)
+}
+///
+
+
+///
+function draw() {
+  background(256, 256, 256);
+
+  push();
+      translate(-car.bodies[2].position.x + 200, 0);
+      push();
+          stroke("rgb(180, 180, 180)")
+          strokeWeight(8);
+          noFill();
+          beginShape();
+              for(let i = 0; i < verticesA.length - 2; i++) {
+                  curveVertex(verticesA[i].x, verticesA[i].y + h - 206);
+              }
+          endShape();
+      pop();
+  pop();
+
+  push();
+      translate(-car.bodies[2].position.x + 200, 0);
+      push();
+          stroke("rgb(180, 180, 180)")
+          strokeWeight(8);
+          noFill();
+          
+          circle(verticesA[2].x, verticesA[2].y + h - 201, 5)
+          circle(verticesA[4].x - 5, verticesA[4].y + h - 201, 5)
+
+          beginShape();
+              for(let i = 5; i < verticesA.length-9; i++) {
+                  circle(verticesA[i].x, verticesA[i].y + h - 201, 5)
+              }
+          endShape();
+
+          circle(verticesA[verticesA.length-5].x, verticesA[verticesA.length-5].y + h - 201, 5)
+          circle(verticesA[verticesA.length-7].x - 5, verticesA[verticesA.length-7].y + h - 201, 5)
+          circle(verticesA[verticesA.length-9].x + 5, verticesA[verticesA.length-9].y + h - 201, 5)
+
+      pop();
+  pop();
+
+
+  push();
+      translate(-car.bodies[2].position.x + 200, 0);
+      push();
+          stroke("rgb(180, 180, 180)")
+          strokeWeight(8);
+          noFill();
+          beginShape();
+              for(let i = 0; i < verticesA.length - 2; i++) {
+                  curveVertex(verticesA[i].x, verticesA[i].y + h - 196);
+              }
+          endShape();
+      pop();
+  pop();
+
+
+  push()
+      translate(200, car.bodies[2].position.y);
+      rotate(car.bodies[2].angle)
+      image(tyres, 0, 0, 44, 44);
+  pop()
+
+  push()
+      translate(200 + (car.bodies[3].position.x - car.bodies[2].position.x), car.bodies[3].position.y);
+      rotate(car.bodies[3].angle)
+      image(tyres, 0, 0, 44, 44);
+  pop()
+
+
+  push()
+      translate(200 + (car.bodies[1].position.x - car.bodies[2].position.x), car.bodies[1].position.y);
+      rotate(car.bodies[1].angle)
+      image(truck_body, 0, 0, 868.02*0.3, 263.5*0.3);
+  pop()
+
+}
+///
+
 
 function Cars(xx, yy, width, height, wheelSize) {
 
@@ -107,7 +210,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelA = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelAOffset + 2, y: wheelYOffset + 55},
+    pointB: { x: wheelAOffset + 2, y: wheelYOffset + 45},
     bodyA: wheelA,
     stiffness: 0.15,
     length: 0,
@@ -115,7 +218,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
   var axelB = Constraint.create({
     bodyB: carBody[0],
-    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 55},
+    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 45},
     bodyA: wheelB,
     stiffness: 0.15,
     length: 0,
