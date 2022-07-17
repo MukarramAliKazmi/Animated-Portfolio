@@ -55,23 +55,24 @@ function setup() {
 
   Matter.Body.setPosition(ground, {
     x: w - ground.bounds.min.x,
-    y: h - ground.bounds.max.y + 730,
+    y: h - ground.bounds.max.y + h,
   });
 
-  const {min: {x}, max: {y}} = ground.bounds;
+  // const {min: {x}, max: {y}} = ground.bounds;
 
   World.add(world, [
     car,
     ground,
   ]);
 
+  console.log(ground)
   // Render.run(render);
   Matter.Runner.run(engine);
 
-  // setInterval(function () {
-  //   render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
-  //   render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
-  // });
+  setInterval(function () {
+    render.bounds.min.x = car.bodies[1].bounds.min.x - 230;
+    render.bounds.max.x = car.bodies[1].bounds.min.x + render.options.width - 230;
+  });
 
 ///
   canvas.position(0, 0);
@@ -89,7 +90,6 @@ function draw() {
 
   push();
       translate(-car.bodies[2].position.x + 200, 0);
-      push();
           stroke("rgb(180, 180, 180)")
           strokeWeight(8);
           noFill();
@@ -98,12 +98,10 @@ function draw() {
                   curveVertex(verticesA[i].x, verticesA[i].y + h - 206);
               }
           endShape();
-      pop();
   pop();
 
   push();
       translate(-car.bodies[2].position.x + 200, 0);
-      push();
           stroke("rgb(180, 180, 180)")
           strokeWeight(8);
           noFill();
@@ -121,13 +119,11 @@ function draw() {
           circle(verticesA[verticesA.length-7].x - 5, verticesA[verticesA.length-7].y + h - 201, 5)
           circle(verticesA[verticesA.length-9].x + 5, verticesA[verticesA.length-9].y + h - 201, 5)
 
-      pop();
   pop();
 
 
   push();
       translate(-car.bodies[2].position.x + 200, 0);
-      push();
           stroke("rgb(180, 180, 180)")
           strokeWeight(8);
           noFill();
@@ -136,7 +132,6 @@ function draw() {
                   curveVertex(verticesA[i].x, verticesA[i].y + h - 196);
               }
           endShape();
-      pop();
   pop();
 
 
@@ -299,13 +294,16 @@ function Cars(xx, yy, width, height, wheelSize) {
 
 function Vertices() {
   var vertices = [
-    ...[...Array(13)].map((_, i) => ({
-        x: i * 250,
+    {x: 0, y: 50},
+    ...[...Array(12)].map((_, i) => ({
+        x: 250 + i * 250,
         y: Math.floor(Math.random() * 150),
     })),
     {x: 3000, y: 200},
     {x: 0, y: 200},
   ];
+
+  console.log(vertices)
 
   var vertices2 = [];
   for(let j = 0; j < 6; j++) {
