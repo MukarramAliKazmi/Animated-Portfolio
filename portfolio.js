@@ -30,6 +30,7 @@ var render = Render.create({
 
 var tyres
 var truck_body
+var plant
 var car 
 var ground
 var canvas
@@ -39,6 +40,7 @@ function setup() {
   canvas = createCanvas(w, h);
   tyres = loadImage('/img/tyre.svg');
   truck_body = loadImage('/img/truck_body.svg')
+  plant = loadImage('/img/plant.svg')
 ///
 
   car = Cars(400, 200, 200, 90, 40);
@@ -83,56 +85,70 @@ function setup() {
 }
 ///
 
-
-///
+let translate_y = 1
+let scl = 1.4
 function draw() {
   background(256, 256, 256);
 
+  // window.addEventListener("keydown", function (event) {
+  //   scl -= 0.00003
+  // },false);
+
+  // translate(0, car.bodies[3].position.y);
+  // scale(scl);
+  // translate(0, -car.bodies[3].position.y);
+
   push();
       translate(-car.bodies[2].position.x + 200, 0);
-          stroke("rgb(180, 180, 180)")
-          strokeWeight(8);
+          stroke("rgb(204, 204, 204)")
+          strokeWeight(1.2);
           noFill();
           beginShape();
               for(let i = 0; i < verticesA.length - 2; i++) {
-                  curveVertex(verticesA[i].x, verticesA[i].y + h - 206);
+                  curveVertex(verticesA[i].x, verticesA[i].y + h - 200);
               }
           endShape();
   pop();
 
+
   push();
       translate(-car.bodies[2].position.x + 200, 0);
-          stroke("rgb(180, 180, 180)")
-          strokeWeight(8);
-          noFill();
+      image(plant, verticesA[30].x, verticesA[30].y + h - 200 - 47.5)
+  pop();
+
+  // push();
+  //     translate(-car.bodies[2].position.x + 200, 0);
+  //         stroke("rgb(180, 180, 180)")
+  //         strokeWeight(8);
+  //         noFill();
           
-          circle(verticesA[2].x, verticesA[2].y + h - 201, 5)
-          circle(verticesA[4].x - 5, verticesA[4].y + h - 201, 5)
+  //         circle(verticesA[2].x, verticesA[2].y + h - 201, 5)
+  //         circle(verticesA[4].x - 5, verticesA[4].y + h - 201, 5)
 
-          beginShape();
-              for(let i = 5; i < verticesA.length-9; i++) {
-                  circle(verticesA[i].x, verticesA[i].y + h - 201, 5)
-              }
-          endShape();
+  //         beginShape();
+  //             for(let i = 5; i < verticesA.length-9; i++) {
+  //                 circle(verticesA[i].x, verticesA[i].y + h - 201, 5)
+  //             }
+  //         endShape();
 
-          circle(verticesA[verticesA.length-5].x, verticesA[verticesA.length-5].y + h - 201, 5)
-          circle(verticesA[verticesA.length-7].x - 5, verticesA[verticesA.length-7].y + h - 201, 5)
-          circle(verticesA[verticesA.length-9].x + 5, verticesA[verticesA.length-9].y + h - 201, 5)
+  //         circle(verticesA[verticesA.length-5].x, verticesA[verticesA.length-5].y + h - 201, 5)
+  //         circle(verticesA[verticesA.length-7].x - 5, verticesA[verticesA.length-7].y + h - 201, 5)
+  //         circle(verticesA[verticesA.length-9].x + 5, verticesA[verticesA.length-9].y + h - 201, 5)
 
-  pop();
+  // pop();
 
 
-  push();
-      translate(-car.bodies[2].position.x + 200, 0);
-          stroke("rgb(180, 180, 180)")
-          strokeWeight(8);
-          noFill();
-          beginShape();
-              for(let i = 0; i < verticesA.length - 2; i++) {
-                  curveVertex(verticesA[i].x, verticesA[i].y + h - 196);
-              }
-          endShape();
-  pop();
+  // push();
+  //     translate(-car.bodies[2].position.x + 200, 0);
+  //         stroke("rgb(180, 180, 180)")
+  //         strokeWeight(8);
+  //         noFill();
+  //         beginShape();
+  //             for(let i = 0; i < verticesA.length - 2; i++) {
+  //                 curveVertex(verticesA[i].x, verticesA[i].y + h - 196);
+  //             }
+  //         endShape();
+  // pop();
 
 
   push()
@@ -142,7 +158,7 @@ function draw() {
   pop()
 
   push()
-      translate(200 + (car.bodies[3].position.x - car.bodies[2].position.x), car.bodies[3].position.y);
+      translate(200 + (car.bodies[3].position.x - car.bodies[2].position.x), car.bodies[3].position.y - 1);
       rotate(car.bodies[3].angle)
       image(tyres, 0, 0, 44, 44);
   pop()
@@ -272,7 +288,7 @@ function Cars(xx, yy, width, height, wheelSize) {
 
 
   window.addEventListener("keydown", function (event) {
-    console.log("hello")
+    // scl -= 0.005
       if (event.code === "ArrowLeft") {        
         Body.setAngularVelocity(wheelA, -0.4);
         Body.setAngularVelocity(wheelB, -0.4);
