@@ -30,18 +30,17 @@ var truck
 var ground
 var canvas
 let verticesA
-///
+////
 function setup() {
   canvas = createCanvas(w, h);
   tyres = loadImage('/img/tyre.svg');
   truck_body = loadImage('/img/truck_body.svg')
   plant = loadImage('/img/plant.svg')
-///
+////
+verticesA = Vertices()
 
-  truck = Truck(400, 200, 200, 90, 40)
+  truck = Truck(340, verticesA[20].y + h - 350, 260.7, 79.5, 22)
 
-  verticesA = Vertices()
-  // verticesA = JSON.parse(localStorage.getItem("vertices"))
   localStorage.clear()
   ground = Bodies.fromVertices(
     w, h,
@@ -65,10 +64,10 @@ function setup() {
   // Render.run(render);
   Matter.Runner.run(engine);
 
-  setInterval(function () {
-    render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
-    render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
-  });
+  // setInterval(function () {
+  //   render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
+  //   render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
+  // });
 
 ///
   canvas.position(0, 0);

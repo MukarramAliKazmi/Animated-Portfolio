@@ -13,9 +13,9 @@ function Truck(xx, yy, width, height, wheelSize) {
 
 var group = Body.nextGroup(true),
     wheelBase = 20,
-    wheelAOffset = -width * 0.5 + wheelBase,
-    wheelBOffset = width * 0.5 - wheelBase,
-    wheelYOffset = 0;
+    wheelAOffset = -200 * 0.5 + wheelBase + 2,
+    wheelBOffset = 200 * 0.5 - wheelBase + 10,
+    wheelYOffset = wheelSize*2;
 
 var truck = Composite.create({ label: "truck" })
 
@@ -23,18 +23,18 @@ var truckBody = [...document.querySelectorAll("svg > path")].map(path => {
     const body = Matter.Bodies.fromVertices(
     xx, yy, Matter.Svg.pathToVertices(path), {}, true
     );
-    Matter.Body.scale(body, 0.3, 0.3);
+    Matter.Body.scale(body, width/869, height/265);
     return body;
 })
 truckBody[0].collisionFilter.group = group
 
-var fakeBody = Bodies.rectangle(xx, yy, 210, 16, {
+var fakeBody = Bodies.rectangle(xx, yy, width*0.85, height*0.19, {
     collisionFilter: {
     group: group,
     },
 })
 
-var wheelA = Bodies.circle(xx + wheelAOffset - 40, yy + wheelYOffset + 50, wheelSize - 18, {
+var wheelA = Bodies.circle(xx + wheelAOffset, yy + wheelYOffset, wheelSize, {
     collisionFilter: {
     group: group,
     },
@@ -43,8 +43,7 @@ var wheelA = Bodies.circle(xx + wheelAOffset - 40, yy + wheelYOffset + 50, wheel
     restitution: 0.8,
 });
 
-
-var wheelB = Bodies.circle(xx + wheelBOffset + 20, yy + wheelYOffset + 50, wheelSize - 18, {
+var wheelB = Bodies.circle(xx + wheelBOffset, yy + wheelYOffset, wheelSize, {
     collisionFilter: {
     group: group,
     },
@@ -55,7 +54,7 @@ var wheelB = Bodies.circle(xx + wheelBOffset + 20, yy + wheelYOffset + 50, wheel
 
 var axelA = Constraint.create({
     bodyB: truckBody[0],
-    pointB: { x: wheelAOffset + 2, y: wheelYOffset + 45},
+    pointB: { x: wheelAOffset, y: wheelYOffset},
     bodyA: wheelA,
     stiffness: 0.15,
     length: 0,
@@ -63,7 +62,7 @@ var axelA = Constraint.create({
 
 var axelB = Constraint.create({
     bodyB: truckBody[0],
-    pointB: { x: wheelBOffset + 10, y: wheelYOffset + 45},
+    pointB: { x: wheelBOffset, y: wheelYOffset},
     bodyA: wheelB,
     stiffness: 0.15,
     length: 0,
@@ -71,8 +70,8 @@ var axelB = Constraint.create({
 
 var axelC = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 100, y: -5},
-    pointA: { x: -200 + 100, y: -13},
+    pointB: { x: wheelAOffset, y: -5},
+    pointA: { x: wheelAOffset, y: -13},
 
     bodyA: truckBody[0],
     stiffness: 1,
@@ -81,9 +80,8 @@ var axelC = Constraint.create({
 
 var axelD = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: -200 + 100, y: 6},
-    pointA: { x: -200 + 100, y: -2},
-
+    pointB: { x: wheelAOffset, y: 6},
+    pointA: { x: wheelAOffset, y: -2},
     bodyA: truckBody[0],
     stiffness: 1,
     length: 0,
@@ -91,8 +89,8 @@ var axelD = Constraint.create({
 
 var axelE = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 100, y: -5},
-    pointA: { x: 200 - 100, y: -13},
+    pointB: { x: wheelBOffset, y: -5},
+    pointA: { x: wheelBOffset, y: -13},
 
     bodyA: truckBody[0],
     stiffness: 1,
@@ -101,8 +99,8 @@ var axelE = Constraint.create({
 
 var axelF = Constraint.create({
     bodyB: fakeBody,
-    pointB: { x: 200 - 100, y: 6},
-    pointA: { x: 200 - 100, y: -2},
+    pointB: { x: wheelBOffset, y: 6},
+    pointA: { x: wheelBOffset, y: -2},
 
     bodyA: truckBody[0],
     stiffness: 1,
