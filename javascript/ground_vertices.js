@@ -1,16 +1,20 @@
 function Vertices() {
     var vertices = [
-        ...[...Array(3)].map((_, i) => ({
-            x: i * 250,
+        {x: 0, y: 50},
+        ...[...Array(2)].map((_, i) => ({
+            x: 250 + i * 250,
             y: 50 + Math.floor(Math.random() * 20),
         })),
-        ...[...Array(10)].map((_, i) => ({
+        ...[...Array(9)].map((_, i) => ({
             x: 750 + i * 250,
             y: Math.floor(Math.random() * 150),
         })),
+        {x: 3000, y: 50},
         {x: 3000, y: 200},
         {x: 0, y: 200},
     ];
+
+    console.log(vertices)
     
     var temp_vertices = [];
     for(let j = 0; j < 6; j++) {

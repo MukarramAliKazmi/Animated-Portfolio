@@ -15,7 +15,7 @@ var group = Body.nextGroup(true),
     wheelBase = 20,
     wheelAOffset = -200 * 0.5 + wheelBase + 2,
     wheelBOffset = 200 * 0.5 - wheelBase + 10,
-    wheelYOffset = wheelSize*2;
+    wheelYOffset = wheelSize*2 + wheelSize/5;
 
 var truck = Composite.create({ label: "truck" })
 
@@ -27,12 +27,6 @@ var truckBody = [...document.querySelectorAll("svg > path")].map(path => {
     return body;
 })
 truckBody[0].collisionFilter.group = group
-
-var fakeBody = Bodies.rectangle(xx, yy, width*0.85, height*0.19, {
-    collisionFilter: {
-    group: group,
-    },
-})
 
 var wheelA = Bodies.circle(xx + wheelAOffset, yy + wheelYOffset, wheelSize, {
     collisionFilter: {
@@ -68,59 +62,15 @@ var axelB = Constraint.create({
     length: 0,
 });
 
-var axelC = Constraint.create({
-    bodyB: fakeBody,
-    pointB: { x: wheelAOffset, y: -5},
-    pointA: { x: wheelAOffset, y: -13},
-
-    bodyA: truckBody[0],
-    stiffness: 1,
-    length: 0,
-});
-
-var axelD = Constraint.create({
-    bodyB: fakeBody,
-    pointB: { x: wheelAOffset, y: 6},
-    pointA: { x: wheelAOffset, y: -2},
-    bodyA: truckBody[0],
-    stiffness: 1,
-    length: 0,
-});
-
-var axelE = Constraint.create({
-    bodyB: fakeBody,
-    pointB: { x: wheelBOffset, y: -5},
-    pointA: { x: wheelBOffset, y: -13},
-
-    bodyA: truckBody[0],
-    stiffness: 1,
-    length: 0,
-});
-
-var axelF = Constraint.create({
-    bodyB: fakeBody,
-    pointB: { x: wheelBOffset, y: 6},
-    pointA: { x: wheelBOffset, y: -2},
-
-    bodyA: truckBody[0],
-    stiffness: 1,
-    length: 0,
-});
-
 Composite.addBody(truck, truckBody[0]);
-Composite.addBody(truck, fakeBody);
 Composite.addBody(truck, wheelA);
 Composite.addBody(truck, wheelB);
 Composite.addConstraint(truck, axelA);
 Composite.addConstraint(truck, axelB);
-Composite.addConstraint(truck, axelC);
-Composite.addConstraint(truck, axelD);
-Composite.addConstraint(truck, axelE);
-Composite.addConstraint(truck, axelF);
-
 
 window.addEventListener("keydown", function (event) {
 
+    console.log(truck.bodies[0])
     if (event.code === "ArrowLeft") {        
         Body.setAngularVelocity(wheelA, -0.4);
         Body.setAngularVelocity(wheelB, -0.4);
@@ -131,7 +81,6 @@ window.addEventListener("keydown", function (event) {
         Body.setAngularVelocity(wheelA, 0);
         Body.setAngularVelocity(wheelB, 0);
         World.remove(world, ground)
-
     }
 
 },false);
