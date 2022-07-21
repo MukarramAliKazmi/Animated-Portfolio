@@ -13,8 +13,6 @@ function Vertices() {
         {x: 3000, y: 200},
         {x: 0, y: 200},
     ];
-
-    console.log(vertices)
     
     var temp_vertices = [];
     for(let j = 0; j < 6; j++) {

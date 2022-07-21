@@ -17,7 +17,7 @@ var render = Render.create({
   options: {
     width: w,
     height: h,
-    wireframes: false,
+    // wireframes: false,
     hasBounds: true,
     showAngleIndicator: true,
   },
@@ -45,27 +45,25 @@ function setup() {
   var group = Body.nextGroup(true);
 
 
-    bridge = Composites.stack(vertices[vertices.length-2].x, h - vertices[vertices.length-2].y, 19, 1, 0, 0, function(x, y) {
-        return Bodies.rectangle(x - 20, y, 53, 20, { 
-            collisionFilter: { group: group },
-            chamfer: 5,
-            density: 0.005,
-            frictionAir: 0.05,
-            render: {
-                fillStyle: '#060a19'
-            }
-        });
-    });
-
-    console.log(bridge)
-    
-    Composites.chain(bridge, 0.3, 0, -0.3, 0, { 
-        stiffness: 1,
-        length: 0,
-        render: {
-            visible: false
-        }
-    });
+  bridge = Composites.stack(vertices[vertices.length-2].x, h - vertices[vertices.length-2].y, 19, 1, 0, 0, function(x, y) {
+      return Bodies.rectangle(x - 20, y, 53, 20, { 
+          collisionFilter: { group: group },
+          chamfer: 5,
+          density: 0.005,
+          frictionAir: 0.05,
+          render: {
+              fillStyle: '#060a19'
+          }
+      });
+  });
+  
+  Composites.chain(bridge, 0.3, 0, -0.3, 0, { 
+      stiffness: 1,
+      length: 0,
+      render: {
+          visible: false
+      }
+  });
 
   let constraint1 = Constraint.create({ 
     bodyA: ground,
@@ -76,7 +74,6 @@ function setup() {
     stiffness: 0.8
   });
 
-  console.log(vertices1[0].x)
   let constraint2 = Constraint.create({ 
       bodyA: ground1,
       pointA: { x: vertices[vertices.length-2].x + 610, y: h - vertices[vertices.length-2].y + 60}, 
@@ -88,6 +85,7 @@ function setup() {
 
   truck = Truck(340, vertices[20].y + h - 350, 260.7, 79.5, 22)
 
+
   ground = Bodies.fromVertices(
     w, h,
     vertices,
@@ -97,14 +95,10 @@ function setup() {
     flagInternal = true,
   );
 
-  console.log(ground)
-  console.log(vertices[vertices.length-2].x)
-
   Body.setPosition(ground, {
     x: w - ground.bounds.min.x,
     y: h - ground.bounds.max.y + h,
   });
-
 
   ground1 = Bodies.fromVertices(
     w, h,
@@ -118,7 +112,6 @@ function setup() {
     x: w - ground1.bounds.min.x + 3600,
     y: h - ground1.bounds.max.y + h,
   });
-  // const {min: {x}, max: {y}} = ground.bounds;
 
   World.add(world, [
     truck,
@@ -137,6 +130,84 @@ function setup() {
     render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
   });
 
+  setInterval(function () {
+
+    if (truck.bodies[0].position.x > 4040) {
+
+      if (ground.position.x < 2000) {
+        vertices = Vertices()
+
+        Body.setPosition(ground1, {
+          x: ground1.position.x - 3600,
+          y: ground1.position.y,
+        });
+
+        World.remove(world, [ground])
+        
+        ground = Bodies.fromVertices(
+          w, h,
+          vertices,
+          {isStatic: true, 
+          collisionFilter: { group: group }
+          },
+          flagInternal = true,
+        );
+      
+        Body.setPosition(ground, {
+          x: w - ground.bounds.min.x,
+          y: h - ground.bounds.max.y + h,
+        });
+
+        Body.setPosition(ground, {
+          x: ground.position.x + 3600,
+          y: ground.position.y,
+        });
+
+        World.add(world, [ground])   
+
+      } else {
+        vertices1 = Vertices()    
+
+        Body.setPosition(ground, {
+          x: ground.position.x - 3600,
+          y: ground.position.y,
+        }); 
+
+        World.remove(world, [ground1])
+
+        ground1 = Bodies.fromVertices(
+          w, h,
+          vertices1,
+          {isStatic: true,
+          collisionFilter: { group: group }},
+          flagInternal = true,
+        );
+      
+        Body.setPosition(ground1, {
+          x: w - ground1.bounds.min.x + 3600,
+          y: h - ground1.bounds.max.y + h,
+        });
+
+        World.add(world, [ground1])
+      }
+
+      Body.setPosition(truck.bodies[0], {
+        x: truck.bodies[0].position.x - 3600,
+        y: truck.bodies[0].position.y,
+      });
+
+      Body.setPosition(truck.bodies[1], {
+        x: truck.bodies[1].position.x - 3600,
+        y: truck.bodies[1].position.y,
+      });
+
+      Body.setPosition(truck.bodies[2], {
+        x: truck.bodies[2].position.x - 3600,
+        y: truck.bodies[2].position.y,
+      });
+    }
+  });
+
 ///
   canvas.position(0, 0);
   rectMode(CENTER)
@@ -149,29 +220,68 @@ function setup() {
 function draw() {
   background(256, 256, 256);
 
-  push();
-      translate(-truck.bodies[1].position.x + 200, 0);
-          stroke("rgb(204, 204, 204)")
-          strokeWeight(1.2);
-          noFill();
-          beginShape();
-              for(let i = 0; i < vertices.length - 2; i++) {
-                  curveVertex(vertices[i].x, vertices[i].y + h - 200);
-              }
-          endShape();
-  pop();
+  if (ground.position.x < 2000) {
 
-  push();
-  translate(-truck.bodies[1].position.x + 200 + 3600, 0);
-      stroke("rgb(204, 204, 204)")
-      strokeWeight(1.2);
-      noFill();
-      beginShape();
-          for(let i = 0; i < vertices1.length - 2; i++) {
-              curveVertex(vertices1[i].x, vertices1[i].y + h - 200);
-          }
-      endShape();
-  pop();
+    push();
+      translate(-truck.bodies[1].position.x + 200, 0);
+      image(plant, vertices[60].x, vertices[60].y + h - 200 - 47.5)
+    pop();
+
+    push();
+        translate(-truck.bodies[1].position.x + 200, 0);
+            stroke("rgb(204, 204, 204)")
+            strokeWeight(1.2);
+            noFill();
+            beginShape();
+                for(let i = 0; i < vertices.length - 2; i++) {
+                    curveVertex(vertices[i].x, vertices[i].y + h - 200);
+                }
+            endShape();
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200 + 3600, 0);
+        stroke("rgb(204, 204, 204)")
+        strokeWeight(1.2);
+        noFill();
+        beginShape();
+            for(let i = 0; i < vertices1.length - 2; i++) {
+                curveVertex(vertices1[i].x, vertices1[i].y + h - 200);
+            }
+        endShape();
+    pop();
+
+  } else {
+
+    push();
+      translate(-truck.bodies[1].position.x + 200, 0);
+      image(plant, vertices1[60].x, vertices1[60].y + h - 200 - 47.5)
+    pop();
+
+    push();
+        translate(-truck.bodies[1].position.x + 200 + 3600, 0);
+            stroke("rgb(204, 204, 204)")
+            strokeWeight(1.2);
+            noFill();
+            beginShape();
+                for(let i = 0; i < vertices.length - 2; i++) {
+                    curveVertex(vertices[i].x, vertices[i].y + h - 200);
+                }
+            endShape();
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200, 0);
+        stroke("rgb(204, 204, 204)")
+        strokeWeight(1.2);
+        noFill();
+        beginShape();
+            for(let i = 0; i < vertices1.length - 2; i++) {
+                curveVertex(vertices1[i].x, vertices1[i].y + h - 200);
+            }
+        endShape();
+    pop();
+  }
 
   for(let i = 0; i < bridge.bodies.length; i++) {
     stroke("rgb(204, 204, 204)")
@@ -181,11 +291,6 @@ function draw() {
         circle(bridge.bodies[i].position.x, bridge.bodies[i].position.y, 20)
     pop();
   }
-
-  push();
-      translate(-truck.bodies[1].position.x + 200, 0);
-      image(plant, vertices[30].x, vertices[30].y + h - 200 - 47.5)
-  pop();
 
   push()
       translate(200, truck.bodies[1].position.y);

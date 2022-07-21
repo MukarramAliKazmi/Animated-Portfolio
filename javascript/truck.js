@@ -70,7 +70,6 @@ Composite.addConstraint(truck, axelB);
 
 window.addEventListener("keydown", function (event) {
 
-    console.log(truck.bodies[0])
     if (event.code === "ArrowLeft") {        
         Body.setAngularVelocity(wheelA, -0.4);
         Body.setAngularVelocity(wheelB, -0.4);
