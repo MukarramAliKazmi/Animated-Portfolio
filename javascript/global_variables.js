@@ -26,14 +26,17 @@ let render = Render.create({
     },
 });
 
+let canvas
 let tyres
 let truck_body
 let plant
 let truck
-let ground
-let ground1
-let canvas
+let vertices0
 let vertices
 let vertices1
+let ground0
+let ground
+let ground1
+let bridge0
 let bridge
 let group = Body.nextGroup(true);

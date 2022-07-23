@@ -11,15 +11,18 @@ function setup() {
   truck_body = loadImage('./img/truck_body.svg')
   plant = loadImage('./img/plant.svg')
 
+  vertices0 = Vertices() //ground_vertices.js
   vertices = Vertices() //ground_vertices.js
   vertices1 = Vertices() //ground_vertices.js
 
-  bridge = Bridge() //bridge.js
+  bridge0 = Bridge(vertices[0].x - 10 - 600, h - vertices[0].y + -90) //bridge.js
+  bridge = Bridge(vertices[vertices.length - 2].x - 10, h - vertices[vertices.length - 2].y + 60) //bridge.js
   truck = Truck(340, vertices[20].y + h - 350, 260.7, 79.5, 22) //truck.js
+  ground0 = Ground(vertices0, -3600) // ground.js
   ground = Ground(vertices, 0) //ground.js
   ground1 = Ground(vertices1, 3600) //ground.js
 
-  World.add(world, [truck, ground, ground1, bridge]);
+  World.add(world, [truck, ground0, ground, ground1, bridge0, bridge]);
 
   // Render.run(render);
   Matter.Runner.run(engine);
@@ -30,11 +33,23 @@ function setup() {
 function draw() {
   background(256, 256, 256);
 
-  if (ground.position.x < 2000) {
+  if (ground.position.x < 2000 && ground.position.x > 0) {
 
     push();
     translate(-truck.bodies[1].position.x + 200, 0);
     image(plant, vertices[60].x, vertices[60].y + h - 200 - 47.5)
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200 - 3600, 0);
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    noFill();
+    beginShape();
+    for (let i = 0; i < vertices0.length - 2; i++) {
+      curveVertex(vertices0[i].x, vertices0[i].y + h - 200);
+    }
+    endShape();
     pop();
 
     push();
@@ -51,6 +66,48 @@ function draw() {
 
     push();
     translate(-truck.bodies[1].position.x + 200 + 3600, 0);
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    noFill();
+    beginShape();
+    for (let i = 0; i < vertices1.length - 2; i++) {
+      curveVertex(vertices1[i].x, vertices1[i].y + h - 200);
+    }
+    endShape();
+    pop();
+
+  } else if (ground.position.x < 0) {
+    push();
+    translate(-truck.bodies[1].position.x + 200, 0);
+    image(plant, vertices[60].x, vertices[60].y + h - 200 - 47.5)
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200 + 3600, 0);
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    noFill();
+    beginShape();
+    for (let i = 0; i < vertices0.length - 2; i++) {
+      curveVertex(vertices0[i].x, vertices0[i].y + h - 200);
+    }
+    endShape();
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200 - 3600, 0);
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    noFill();
+    beginShape();
+    for (let i = 0; i < vertices.length - 2; i++) {
+      curveVertex(vertices[i].x, vertices[i].y + h - 200);
+    }
+    endShape();
+    pop();
+
+    push();
+    translate(-truck.bodies[1].position.x + 200, 0);
     stroke("rgb(204, 204, 204)")
     strokeWeight(1.2);
     noFill();
@@ -69,6 +126,18 @@ function draw() {
     pop();
 
     push();
+    translate(-truck.bodies[1].position.x + 200, 0);
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    noFill();
+    beginShape();
+    for (let i = 0; i < vertices0.length - 2; i++) {
+      curveVertex(vertices0[i].x, vertices0[i].y + h - 200);
+    }
+    endShape();
+    pop();
+
+    push();
     translate(-truck.bodies[1].position.x + 200 + 3600, 0);
     stroke("rgb(204, 204, 204)")
     strokeWeight(1.2);
@@ -81,7 +150,7 @@ function draw() {
     pop();
 
     push();
-    translate(-truck.bodies[1].position.x + 200, 0);
+    translate(-truck.bodies[1].position.x + 200 - 3600, 0);
     stroke("rgb(204, 204, 204)")
     strokeWeight(1.2);
     noFill();
@@ -90,6 +159,15 @@ function draw() {
       curveVertex(vertices1[i].x, vertices1[i].y + h - 200);
     }
     endShape();
+    pop();
+  }
+
+  for (let i = 0; i < bridge0.bodies.length; i++) {
+    stroke("rgb(204, 204, 204)")
+    strokeWeight(1.2);
+    push();
+    translate(-truck.bodies[1].position.x + 200, 0);
+    circle(bridge0.bodies[i].position.x, bridge0.bodies[i].position.y, 20)
     pop();
   }
 
