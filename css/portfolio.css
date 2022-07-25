@@ -8,3 +8,13 @@ body {
 svg {
     display: none;
 }
+
+img {
+    position: absolute;
+    width: 200;
+} 
+
+
+/* canvas {
+    background-color: red;
+} */

@@ -1,9 +1,9 @@
 function GroundInterval() {
 
-    setInterval(function () {
-        render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
-        render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
-    });
+    // setInterval(function () {
+    //     render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
+    //     render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
+    // });
 
     setInterval(function () {
 
