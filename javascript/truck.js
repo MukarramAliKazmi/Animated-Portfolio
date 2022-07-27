@@ -35,6 +35,29 @@ function Truck(xx, yy, width, height, wheelSize) {
         restitution: 0.8,
     });
 
+    var player = Bodies.rectangle(xx + 30, yy, 10, 60, {
+        collisionFilter: {
+            group: group,
+        }
+    })
+
+    var axelC = Constraint.create({
+        bodyB: truckBody[0],
+        pointB: { x: 30, y: 0 },
+        bodyA: player,
+        stiffness: 0.09,
+        length: 0,
+    });
+
+    var axelD = Constraint.create({
+        bodyB: truckBody[0],
+        pointB: { x: 30, y: 10 },
+        pointA: { x: 0, y: 10 },
+        bodyA: player,
+        stiffness: 0.2,
+        length: 0,
+    });
+
     var axelA = Constraint.create({
         bodyB: truckBody[0],
         pointB: { x: wheelAOffset, y: wheelYOffset },
@@ -54,17 +77,20 @@ function Truck(xx, yy, width, height, wheelSize) {
     Composite.addBody(truck, truckBody[0]);
     Composite.addBody(truck, wheelA);
     Composite.addBody(truck, wheelB);
+    Composite.addBody(truck, player);
     Composite.addConstraint(truck, axelA);
     Composite.addConstraint(truck, axelB);
+    Composite.addConstraint(truck, axelC);
+    Composite.addConstraint(truck, axelD);
 
     window.addEventListener("keydown", function (event) {
 
         if (event.code === "ArrowLeft") {
-            Body.setAngularVelocity(wheelA, -0.4);
-            Body.setAngularVelocity(wheelB, -0.4);
+            Body.setAngularVelocity(wheelA, -0.3);
+            Body.setAngularVelocity(wheelB, -0.3);
         } else if (event.code === "ArrowRight") {
-            Body.setAngularVelocity(wheelA, 0.4);
-            Body.setAngularVelocity(wheelB, 0.4);
+            Body.setAngularVelocity(wheelA, 0.3);
+            Body.setAngularVelocity(wheelB, 0.3);
         } else if (event.code === "ArrowDown") {
             Body.setAngularVelocity(wheelA, 0);
             Body.setAngularVelocity(wheelB, 0);

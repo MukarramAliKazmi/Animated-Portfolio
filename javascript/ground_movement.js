@@ -1,9 +1,9 @@
 function GroundInterval() {
 
-    // setInterval(function () {
-    //     render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
-    //     render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
-    // });
+    setInterval(function () {
+        render.bounds.min.x = truck.bodies[1].bounds.min.x - 230;
+        render.bounds.max.x = truck.bodies[1].bounds.min.x + render.options.width - 230;
+    });
 
     setInterval(function () {
 
@@ -41,20 +41,12 @@ function GroundInterval() {
 
             }
 
-            Body.setPosition(truck.bodies[0], {
-                x: truck.bodies[0].position.x - 3600,
-                y: truck.bodies[0].position.y,
-            });
+            for (let i = 0; i < truck.bodies.length; i++)
+                Body.setPosition(truck.bodies[i], {
+                    x: truck.bodies[i].position.x - 3600,
+                    y: truck.bodies[i].position.y,
+                });
 
-            Body.setPosition(truck.bodies[1], {
-                x: truck.bodies[1].position.x - 3600,
-                y: truck.bodies[1].position.y,
-            });
-
-            Body.setPosition(truck.bodies[2], {
-                x: truck.bodies[2].position.x - 3600,
-                y: truck.bodies[2].position.y,
-            });
         } else if (truck.bodies[0].position.x < (4040 - 3600 * 2)) {
 
             if (ground.position.x < 2000 && ground.position.x > 0) {
@@ -89,20 +81,11 @@ function GroundInterval() {
 
             }
 
-            Body.setPosition(truck.bodies[0], {
-                x: truck.bodies[0].position.x + 3600,
-                y: truck.bodies[0].position.y,
-            });
-
-            Body.setPosition(truck.bodies[1], {
-                x: truck.bodies[1].position.x + 3600,
-                y: truck.bodies[1].position.y,
-            });
-
-            Body.setPosition(truck.bodies[2], {
-                x: truck.bodies[2].position.x + 3600,
-                y: truck.bodies[2].position.y,
-            });
+            for (let i = 0; i < truck.bodies.length; i++)
+                Body.setPosition(truck.bodies[i], {
+                    x: truck.bodies[i].position.x + 3600,
+                    y: truck.bodies[i].position.y,
+                });
         }
     });
 }

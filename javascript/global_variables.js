@@ -40,3 +40,4 @@ let ground1
 let bridge0
 let bridge
 let group = Body.nextGroup(true);
+let v0, v, v1;

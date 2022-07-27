@@ -1,7 +1,7 @@
 function Bridge(x, y) {
 
     bridge = Composites.stack(x, y, 19, 1, 0, 0, function (x, y) {
-        return Bodies.rectangle(x - 20, y, 53, 20, {
+        return Bodies.rectangle(x - 20, y, 55, 20, {
             collisionFilter: { group: group },
             chamfer: 5,
             density: 0.005,
@@ -18,7 +18,7 @@ function Bridge(x, y) {
     });
 
     let constraint1 = Constraint.create({
-        pointA: { x, y },
+        pointA: { x: x - 20, y },
         bodyB: bridge.bodies[0],
         pointB: { x: -20, y: 0 },
         length: 2,
@@ -26,7 +26,7 @@ function Bridge(x, y) {
     });
 
     let constraint2 = Constraint.create({
-        pointA: { x: x + 620, y },
+        pointA: { x: x + 620 + 20, y },
         bodyB: bridge.bodies[bridge.bodies.length - 1],
         pointB: { x: 20, y: 0 },
         length: 2,
